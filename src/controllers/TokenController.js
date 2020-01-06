@@ -2,13 +2,22 @@ require('app-module-path').addPath(require('app-root-path').toString());
 require('dotenv').config();
 
 const {
-    getTotalSupply,
+    getTotalSupplyWithDecimal,
+    getTotalSupplyNoDecimal,
     getDecimals,
     getBalanceOf,
 } = require('src/services/TokenService');
 
-async function getTotalSupplyCall(req, res, next) {
-    const totalSupply = await getTotalSupply();
+async function getTotalSupplyWithDecimalCall(req, res, next) {
+    const totalSupply = await getTotalSupplyWithDecimal();
+    res.send({
+        status: 200,
+        result: totalSupply,
+    });
+}
+
+async function getTotalSupplyNoDecimalCall(req, res, next) {
+    const totalSupply = await getTotalSupplyNoDecimal();
     res.send({
         status: 200,
         result: totalSupply,
@@ -24,8 +33,7 @@ async function getDecimalsCall(req, res, next) {
 }
 
 async function getBalanceOfCall(req, res, next) {
-    console.log('req', req);
-    // const address = req.path.address;
+    const address = req.params.address;
     const balance = await getBalanceOf(address);
     res.send({
         status: 200,
@@ -34,7 +42,8 @@ async function getBalanceOfCall(req, res, next) {
 }
 
 module.exports = {
-    getTotalSupplyCall,
+    getTotalSupplyWithDecimalCall,
+    getTotalSupplyNoDecimalCall,
     getDecimalsCall,
     getBalanceOfCall,
 };

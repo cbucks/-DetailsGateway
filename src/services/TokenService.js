@@ -18,26 +18,31 @@ const TokenContract = new web3.eth.Contract(
     TOKEN_CONTRACT_ADDRESS,
 );
 
-async function getTotalSupply() {
-    const totalSupply = await TokenContract.methods.totalSupply().call();
-    console.log('TOTAL SUPPLY:', totalSupply);
+async function getTotalSupplyWithDecimal() {
+    let totalSupply = await TokenContract.methods.totalSupply().call();
+    totalSupply = (totalSupply / 100).toFixed(2);
+    return totalSupply;
+}
+
+async function getTotalSupplyNoDecimal() {
+    let totalSupply = await TokenContract.methods.totalSupply().call();
+    totalSupply = totalSupply / 100;
     return totalSupply;
 }
 
 async function getDecimals() {
     const decimals = await TokenContract.methods.decimals().call();
-    console.log('DECIMAL:', decimals);
     return decimals;
 }
 
 async function getBalanceOf() {
     const balance = await TokenContract.methods.balanceOf(SENDER_ADDRESS).call();
-    console.log('balance:', balance);
     return balance;
 }
 
 module.exports = {
-    getTotalSupply,
+    getTotalSupplyWithDecimal,
+    getTotalSupplyNoDecimal,
     getDecimals,
     getBalanceOf,
 };
